@@ -1,0 +1,29 @@
+{
+  "name": "mypage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "build:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt build",
+    "generate:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
+    "dat.gui": "^0.7.3",
+    "node-sass": "^4.9.4",
+    "normalize.css": "^8.0.0",
+    "nuxt": "^2.2.0",
+    "sass-loader": "^7.1.0"
+  },
+  "devDependencies": {
+    "raw-loader": "^0.5.1",
+    "three": "^0.97.0"
+  }
+}

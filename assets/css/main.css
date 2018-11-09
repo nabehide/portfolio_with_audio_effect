@@ -1,0 +1,32 @@
+body {
+  font-size: 24px;
+
+  color: #111;
+  background: #eee;
+  height: 100%;
+  width: 100%;
+
+}
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #111;
+}
+
+@media screen and (min-width:768px) {
+  body {
+    font-size: 16px;
+  }
+}
+.isColorInverted * {
+  color: #eee;
+  border-color: #eee;
+}
+
+.isColorInverted a:link,
+.isColorInverted a:visited,
+.isColorInverted a:hover,
+.isColorInverted a:active {
+  color: #eee;
+}
