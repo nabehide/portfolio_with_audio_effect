@@ -17,7 +17,6 @@ export default {
   asyncData({ env }) {
     return {
       wallpapers: env.wallpapers,
-      baseURL: env.baseURL,
     }
   },
 }
