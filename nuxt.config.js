@@ -1,9 +1,3 @@
-const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
-  router: {
-    base: '/mypage/',
-  },
-} : {}
-
 const pluginsBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
   plugins: [
     { src: '~plugins/ga.js', ssr: false },
@@ -48,5 +42,4 @@ module.exports = {
       })
     },
   },
-  ...routerBase,
 }
