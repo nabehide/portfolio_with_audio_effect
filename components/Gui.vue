@@ -25,6 +25,16 @@ export default {
     this.canvasParametersState = this.$store.getters["canvasParameters/state"]
     this.canvasParameters = JSON.parse(JSON.stringify(this.canvasParametersState))
 
+    const general = this.gui.addFolder("general")
+    general.open()
+    for (let name in this.canvasParameters) {
+      const { max, min, step } = this.canvasParameters[name]
+      general.add(this.canvasParameters[name], name, min, max, step).listen().onChange(() => {
+        console.log(this.canvasParameters[name][name])
+        this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name][name]})
+      })
+    }
+
     this.state = this.$store.getters["parameters/state"]
     this.parameters = JSON.parse(JSON.stringify(this.state))
 
@@ -131,7 +141,7 @@ export default {
         this.midiDevices.inputs[value.name] = value
         value.addEventListener('midimessage', this.inputEvent, false)
       }
-      const outputIterator = data.outpus.values()
+      const outputIterator = data.outputs.values()
       for (let output=outputIterator.next(); !output.done; output=outputIterator.next()) {
         const value = output.value
         this.midiDevices.outputs[value.name] = value

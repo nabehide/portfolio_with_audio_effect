@@ -1,7 +1,7 @@
 export const state = () => ({
   invertColor: {
     isColorInverted: {
-      tyle: Boolean,
+      type: Boolean,
       isColorInverted: true,
       max: null,
       min: null,
@@ -10,14 +10,14 @@ export const state = () => ({
   },
   glitch: {
     isGlitched: {
-      tyle: Boolean,
+      type: Boolean,
       isGlitched: false,
       max: null,
       min: null,
       step: null,
     },
     glitch: {
-      tyle: Number,
+      type: Number,
       glitch: 5.0,
       max: 30,
       min: 0,
@@ -26,7 +26,7 @@ export const state = () => ({
   },
   zoom: {
     zoom: {
-      tyle: Number,
+      type: Number,
       zoom: 1.0,
       max: 8.0,
       min: 0.1,
@@ -35,14 +35,14 @@ export const state = () => ({
   },
   time: {
     isStopped: {
-      tyle: Boolean,
+      type: Boolean,
       isStopped: false,
       max: null,
       min: null,
       step: null,
     },
     speed: {
-      tyle: Number,
+      type: Number,
       speed: 0.05,
       max: 2,
       min: 0.01,

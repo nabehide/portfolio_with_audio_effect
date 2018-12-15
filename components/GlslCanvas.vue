@@ -105,7 +105,7 @@ export default {
       this.camera.aspect = this.aspect
     }
 
-    this.fps = 1000.0 / 30.0
+    this.fps = 1000.0 / this.$store.state.canvasParameters.fps.fps
     this.past = this.getTime()
     this.animate()
   },
@@ -114,6 +114,7 @@ export default {
       requestAnimationFrame(this.animate)
 
       this.now = this.getTime()
+      this.fps = 1000.0 / this.$store.state.canvasParameters.fps.fps
       if (this.fps < this.now - this.past) {
         this.updateUniforms()
 
