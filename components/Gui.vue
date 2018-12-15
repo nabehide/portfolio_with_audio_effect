@@ -22,6 +22,9 @@ export default {
     const guiContainer = document.getElementById("guiContainer")
     guiContainer.appendChild(this.gui.domElement)
 
+    this.canvasParametersState = this.$store.getters["canvasParameters/state"]
+    this.canvasParameters = JSON.parse(JSON.stringify(this.canvasParametersState))
+
     this.state = this.$store.getters["parameters/state"]
     this.parameters = JSON.parse(JSON.stringify(this.state))
 
@@ -94,8 +97,10 @@ export default {
       outputs: {},
     }
     const requestMIDI = () => {
-      navigator["requestMIDIAccess"]()
-      .then(this.requestSuccess, this.requestError)
+      if (navigator["requestMIDIAccess"]) {
+        navigator["requestMIDIAccess"]()
+        .then(this.requestSuccess, this.requestError)
+      }
     }
     requestMIDI()
     console.log("midiDevices", this.midiDevices)

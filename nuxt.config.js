@@ -5,8 +5,8 @@ const pluginsBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
 } : {}
 
 module.exports = {
-  title: 'portfolio',
   head: {
+    title: 'nabehide\'s portfolio',
     meta: [
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     ],

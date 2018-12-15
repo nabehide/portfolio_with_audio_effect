@@ -20,11 +20,33 @@
           <td> <a href="https://soundcloud.com/nabehide" target="_blank" class="icon"><i class="fab fa-soundcloud"></i></a> </td>
           <td> <a href="https://soundcloud.com/nabehide" target="_blank">Soundcloud</a> </td>
         </tr>
+
         <!--
+        <tr>
+          <td> <a href="https://suzuri.jp/____nabehide" target="_blank" class="icon"><img src="/surisurikun.png" width="36px" height="36px" ></a> </td>
+          <td> <a href="https://suzuri.jp/____nabehide" target="_blank">Suzuri</a> </td>
+        </tr>
+
+        <tr>
+          <td> <a href="https://qiita.com/nabehide" target="_blank" class="icon"><i></i></a> </td>
+          <td> <a href="https://qiita.com/nabehide" target="_blank">Qiita</a> </td>
+        </tr>
+
         <tr>
           <td> <a class="icon"></a> </td>
           <td> <a href="https://www.shadertoy.com/user/nabehide" class="text" target="_blank">Shadertoy</a> </td>
         </tr>
+
+        <tr>
+          <td> <a href="https://medium.com/@nabehide" target="_blank" class="icon"><i class="fab fa-medium"></i></a> </td>
+          <td> <a href="https://medium.com/@nabehide" target="_blank">Medium</a> </td>
+        </tr>
+
+        <tr>
+          <td> <a href="https://www.linkedin.com/nabehide" target="_blank" class="icon"><i class="fab fa-linkedin"></i></a> </td>
+          <td> <a href="https://www.linkedin.com/nabehide" target="_blank">Linkedin</a> </td>
+        </tr>
+
         -->
       </table>
     </div>

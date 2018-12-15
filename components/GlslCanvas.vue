@@ -67,7 +67,9 @@ export default {
       }
     }
 
-    const fragmentShader = require('@/assets/glsl/' + 'curves' + '/source.frag')
+    // const filename = "curves"
+    const filename = "orb"
+    const fragmentShader = require('@/assets/glsl/' + filename + '/source.frag')
 
     const material = new THREE.ShaderMaterial({
       vertexShader: DEFAULT_VERTEX_SHADER,
