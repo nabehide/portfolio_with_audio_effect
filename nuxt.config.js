@@ -1,6 +1,8 @@
-const pluginsBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
-  plugins: [
-    { src: '~plugins/ga.js', ssr: false },
+const modulesBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+  modules: [
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-125972611-2'
+    }]
   ],
 } : {}
 
@@ -17,7 +19,6 @@ module.exports = {
       },
     ],
   },
-  ...pluginsBase,
   env: {
     wallpapers: [
       { name: "arabesque" },
@@ -42,4 +43,5 @@ module.exports = {
       })
     },
   },
+  ...modulesBase,
 }
