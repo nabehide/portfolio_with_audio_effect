@@ -6,6 +6,14 @@ export const state = () => ({
     min: 1,
     step: 1,
   },
+  scene: {
+    type: 'object',
+    scene: ["orb", "curves"],
+    selected: "orb",
+    max: null,
+    min: null,
+    step: null,
+  },
 })
 
 export const mutations = {

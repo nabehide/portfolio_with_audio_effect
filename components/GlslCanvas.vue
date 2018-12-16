@@ -67,9 +67,8 @@ export default {
       }
     }
 
-    // const filename = "curves"
-    const filename = "orb"
-    const fragmentShader = require('@/assets/glsl/' + filename + '/source.frag')
+    const canvasParameters = this.$store.getters["canvasParameters/state"]
+    const fragmentShader = require('@/assets/glsl/' + canvasParameters.scene.selected + '/source.frag')
 
     const material = new THREE.ShaderMaterial({
       vertexShader: DEFAULT_VERTEX_SHADER,

@@ -28,11 +28,18 @@ export default {
     const general = this.gui.addFolder("general")
     general.open()
     for (let name in this.canvasParameters) {
-      const { max, min, step } = this.canvasParameters[name]
-      general.add(this.canvasParameters[name], name, min, max, step).listen().onChange(() => {
-        console.log(this.canvasParameters[name][name])
-        this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name][name]})
-      })
+      const { max, min, step, type } = this.canvasParameters[name]
+      if ( type == 'object' ) {
+        /*
+        general.add(this.canvasParameters[name], name, this.canvasParameters[name][name]).setValue(this.canvasParameters[name].selected).onChange(() => {
+          this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name].selected})
+        })
+        */
+      } else {
+        general.add(this.canvasParameters[name], name, min, max, step).listen().onChange(() => {
+          this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name][name]})
+        })
+      }
     }
 
     this.state = this.$store.getters["parameters/state"]
