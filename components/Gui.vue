@@ -40,19 +40,21 @@ export default {
     // scene
     general.add(
       this.canvasParameters["scene"], "scene",
-      this.canvasParameters["scene"]["scene"])
-    .setValue(this.canvasParameters["scene"].selected)
+      this.canvasParameters["scene"]["scenes"])
+    .setValue(this.canvasParameters["scene"]["scene"])
     .onChange(() => {
-      this.$store.commit("canvasParameters/set", {name: "scene", value: this.canvasParameters["scene"].selected})
+      this.$store.commit("canvasParameters/set", {name: "scene", value: this.canvasParameters["scene"]["scene"]})
+      document.getElementById("buttonChangeScene").click()
     })
 
     // audio source
     general.add(
-      this.canvasParameters.audioSource, "audioSource", this.canvasParameters.audioSource.audioSource)
-    .setValue(this.canvasParameters["audioSource"].selected)
+      this.canvasParameters.audioSource, "audioSource",
+      this.canvasParameters.audioSource.audioSources)
+    .setValue(this.canvasParameters["audioSource"]["audioSource"])
     .listen()
     .onChange(() => {
-      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"].selected})
+      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["sudioSource"]})
     })
 
     this.state = this.$store.getters["parameters/state"]

@@ -1,6 +1,7 @@
 <template>
   <div id="container">
     <canvas id="canvas"/>
+    <input type="button" id="buttonChangeScene" style="display: none;" @click="handleChangeScene" >
   </div>
 </template>
 
@@ -28,6 +29,10 @@ export default {
     startAudio () {
       console.log("start")
       this.three.mediaElement.play()
+    },
+    handleChangeScene () {
+      console.log("change scene", this.$store.state.canvasParameters.scene.scene)
+      this.three.setScene()
     },
   },
   updated () {

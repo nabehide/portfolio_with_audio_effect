@@ -30,7 +30,7 @@ export default class Three {
     this.initRenderer()
     this.initUniforms()
     this.initOthers()
-    this.setShader()
+    this.setScene()
     this.setAudio()
 
     this.animate()
@@ -90,10 +90,15 @@ export default class Three {
     this.past = this.getTime()
   }
 
-  setShader () {
+  setScene () {
+    if (this.plane) {
+      this.scene.remove(this.plane)
+    }
+
     const canvasParameters = this.store.getters["canvasParameters/state"]
-    const fragmentShader = require('@/assets/glsl/' + canvasParameters.scene.selected + '/source.frag')
-    const vertexShader = require('@/assets/glsl/' + canvasParameters.scene.selected + '/source.vert')
+
+    const fragmentShader = require('@/assets/glsl/' + canvasParameters.scene.scene + '/source.frag')
+    const vertexShader = require('@/assets/glsl/' + canvasParameters.scene.scene + '/source.vert')
 
     const material = new THREE.ShaderMaterial({
       vertexShader: vertexShader || DEFAULT_VERTEX_SHADER,
