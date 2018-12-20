@@ -147,16 +147,34 @@ export default class Three {
   setAudio () {
     const audioFileName = "gpe.m4a"
     const listener = new THREE.AudioListener()
-    const audio = new THREE.Audio(listener)
-    this.mediaElement = new Audio(audioFileName)
-    this.mediaElement.loop = true
-    audio.setMediaElementSource(this.mediaElement)
+    this.sound = new THREE.Audio(listener)
+    this.audioLoader = new THREE.AudioLoader()
+    this.audioLoader.load(audioFileName, (buffer) => {
+      this.sound.setBuffer(buffer)
+      this.sound.setLoop(true)
+    })
 
     const fftSize = 128
-    this.analyser = new THREE.AudioAnalyser(audio, fftSize)
+    this.analyser = new THREE.AudioAnalyser(this.sound, fftSize)
     this.uniforms = Object.assign({
       tAudioData: {
         value: new THREE.DataTexture( this.analyser.data, fftSize / 2, 1, THREE.LuminanceFormat )
       } }, this.uniforms)
+  }
+
+  startAudio () {
+    console.log("start music")
+    this.sound.play()
+    console.log(this.sound.isPlaying)
+  }
+  stopAudio () {
+    console.log(this.sound.isPlaying)
+    if (this.sound.isPlaying) {
+      console.log("stop music")
+      this.sound.stop()
+    }
+  }
+
+  startMicrophone () {
   }
 }

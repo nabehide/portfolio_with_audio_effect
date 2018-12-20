@@ -1,19 +1,24 @@
 export const state = () => ({
   fps: {
-    type: Number,
+    type: "Number",
     fps: 30,
     max: 60,
     min: 1,
     step: 1,
   },
   scene: {
-    type: 'object',
-    scene: ["orb", "curves"],
-    selected: "orb",
+    type: 'Object',
+    scenes: ["orb", "curves", "audio"],
+    scene: "orb",
     max: null,
     min: null,
     step: null,
   },
+  audioSource: {
+    type: "Object",
+    audioSources: ["none", "music", "microphone"],
+    audioSource: "none",
+  }
 })
 
 export const mutations = {

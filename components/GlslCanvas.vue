@@ -1,7 +1,9 @@
 <template>
   <div id="container">
     <canvas id="canvas"/>
+
     <input type="button" id="buttonChangeScene" style="display: none;" @click="handleChangeScene" >
+    <input type="button" id="buttonChangeAudioSource" style="display: none;" @click="handleChangeAudioSource" >
   </div>
 </template>
 
@@ -21,19 +23,25 @@ export default {
   },
   mounted () {
     this.three.mounted()
-
-    const button = document.getElementById("button")
-    button.addEventListener("click", this.startAudio)
   },
   methods: {
-    startAudio () {
-      console.log("start")
-      this.three.mediaElement.play()
-    },
+
     handleChangeScene () {
       console.log("change scene", this.$store.state.canvasParameters.scene.scene)
       this.three.setScene()
     },
+    handleChangeAudioSource () {
+      const audioSource = this.$store.state.canvasParameters.audioSource.audioSource
+
+      if (audioSource === "music") {
+        this.three.startAudio()
+      } else if (audioSource === "microphone") {
+        this.three.stopAudio()
+        this.three.startMicrophone()
+      } else {
+        this.three.stopAudio()
+      }
+    }
   },
   updated () {
   },

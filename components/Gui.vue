@@ -54,7 +54,9 @@ export default {
     .setValue(this.canvasParameters["audioSource"]["audioSource"])
     .listen()
     .onChange(() => {
-      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["sudioSource"]})
+      console.log(this.canvasParameters.audioSource.audioSource)
+      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["audioSource"]})
+      document.getElementById("buttonChangeAudioSource").click()
     })
 
     this.state = this.$store.getters["parameters/state"]
