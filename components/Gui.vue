@@ -27,20 +27,33 @@ export default {
 
     const general = this.gui.addFolder("general")
     general.open()
-    for (let name in this.canvasParameters) {
-      const { max, min, step, type } = this.canvasParameters[name]
-      if ( type == 'object' ) {
-        /*
-        general.add(this.canvasParameters[name], name, this.canvasParameters[name][name]).setValue(this.canvasParameters[name].selected).onChange(() => {
-          this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name].selected})
-        })
-        */
-      } else {
-        general.add(this.canvasParameters[name], name, min, max, step).listen().onChange(() => {
-          this.$store.commit("canvasParameters/set", {name: name, value: this.canvasParameters[name][name]})
-        })
-      }
-    }
+
+    // fps
+    general.add(
+      this.canvasParameters["fps"], "fps",
+      this.canvasParameters["fps"].min, this.canvasParameters["fps"].max,
+      this.canvasParameters["fps"].step
+    ).listen().onChange(() => {
+      this.$store.commit("canvasParameters/set", {name: "fps", value: this.canvasParameters["fps"]["fps"]})
+    })
+
+    // scene
+    general.add(
+      this.canvasParameters["scene"], "scene",
+      this.canvasParameters["scene"]["scene"])
+    .setValue(this.canvasParameters["scene"].selected)
+    .onChange(() => {
+      this.$store.commit("canvasParameters/set", {name: "scene", value: this.canvasParameters["scene"].selected})
+    })
+
+    // audio source
+    general.add(
+      this.canvasParameters.audioSource, "audioSource", this.canvasParameters.audioSource.audioSource)
+    .setValue(this.canvasParameters["audioSource"].selected)
+    .listen()
+    .onChange(() => {
+      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"].selected})
+    })
 
     this.state = this.$store.getters["parameters/state"]
     this.parameters = JSON.parse(JSON.stringify(this.state))
