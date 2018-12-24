@@ -36,8 +36,6 @@ float line(vec2 p, float w){
 void main(void){
     vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
 
-    p *= zoom;
-
     vec3 draw = vec3(0.0);
 
     float period = 5.0;
@@ -55,6 +53,8 @@ void main(void){
         }
       }
     }
+
+    p *= zoom;
     
     for (int i=0; i<3; i++) {
 	    float b = (t + float(i) * period / 3.0) * PI * 0.4;
