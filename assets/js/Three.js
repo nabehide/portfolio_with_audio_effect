@@ -1,4 +1,18 @@
-import * as THREE from 'three'
+import {
+  Audio,
+  AudioAnalyser,
+  AudioListener,
+  AudioLoader,
+  DataTexture,
+  LuminanceFormat,
+  Mesh,
+  OrthographicCamera,
+  PlaneGeometry,
+  Scene,
+  ShaderMaterial,
+  WebGLRenderer,
+  Vector2,
+} from 'three'
 
 const DEFAULT_VERTEX_SHADER = `
 void main() {
@@ -22,7 +36,7 @@ void main() {
 export default class Three {
 
   constructor(store) {
-    this.scene  = new THREE.Scene()
+    this.scene  = new Scene()
     this.store = store
   }
 
@@ -32,6 +46,7 @@ export default class Three {
     this.initOthers()
     this.setScene()
     this.setAudio()
+    this.setAudioAnalyser()
 
     this.animate()
   }
@@ -41,7 +56,7 @@ export default class Three {
     this.height = window.innerHeight
     this.aspect = this.width / this.height
 
-    this.camera = new THREE.OrthographicCamera(-this.aspect, this.aspect, 1, -1, 0.1, 10)
+    this.camera = new OrthographicCamera(-this.aspect, this.aspect, 1, -1, 0.1, 10)
     this.camera.position.set(0, 0, 1)
     this.camera.lookAt(this.scene.position)
     this.scene.add(this.camera)
@@ -50,7 +65,7 @@ export default class Three {
     canvas.width = this.width
     canvas.height = this.height
 
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       canvas: canvas,
       antialias: true,
       width: this.width,
@@ -62,7 +77,7 @@ export default class Three {
     this.uniforms = {}
     const DEFAULT_UNIFORMS = {
       time: {type: 'f', value: 0.0},
-      resolution: {type: 'v2', value: new THREE.Vector2(this.width, this.height)},
+      resolution: {type: 'v2', value: new Vector2(this.width, this.height)},
     }
     this.uniforms = Object.assign(DEFAULT_UNIFORMS, this.uniforms)
 
@@ -100,13 +115,13 @@ export default class Three {
     const fragmentShader = require('@/assets/glsl/' + canvasParameters.scene.scene + '/source.frag')
     const vertexShader = require('@/assets/glsl/' + canvasParameters.scene.scene + '/source.vert')
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       vertexShader: vertexShader || DEFAULT_VERTEX_SHADER,
       fragmentShader: fragmentShader || DEFAULT_FRAGMENT_SHADER,
       uniforms: this.uniforms,
     })
-    const geometry = new THREE.PlaneGeometry(2 * this.aspect, 2)
-    this.plane = new THREE.Mesh(geometry, material)
+    const geometry = new PlaneGeometry(2 * this.aspect, 2)
+    this.plane = new Mesh(geometry, material)
     this.scene.add(this.plane)
   }
 
@@ -129,7 +144,19 @@ export default class Three {
       this.uniforms.time.value += (this.now - this.past)*0.001 * Number(this.store.state.parameters.time.speed.speed)
     }
 
-    this.analyser.getFrequencyData()
+    const audioSource = this.store.state.canvasParameters.audioSource.audioSource
+    if (audioSource === "music" ) {
+      if (this.analyser) {
+        this.analyser.getFrequencyData()
+        this.tAudioData = this.analyser.data
+      }
+    }else if ( audioSource === "microphone" ) {
+      if (this.analyserMicrophone) {
+        this.analyserMicrophone.getByteFrequencyData(this.dataMicrophone)
+        this.tAudioData = this.dataMicrophone
+      }
+    }
+    // console.log(this.tAudioData)
     this.uniforms.tAudioData.value.needsUpdate = true
 
     for (let p in this.store.state.parameters) {
@@ -146,19 +173,22 @@ export default class Three {
 
   setAudio () {
     const audioFileName = "gpe.m4a"
-    const listener = new THREE.AudioListener()
-    this.sound = new THREE.Audio(listener)
-    this.audioLoader = new THREE.AudioLoader()
+    const listener = new AudioListener()
+    this.sound = new Audio(listener)
+    this.audioLoader = new AudioLoader()
     this.audioLoader.load(audioFileName, (buffer) => {
       this.sound.setBuffer(buffer)
       this.sound.setLoop(true)
     })
+  }
 
-    const fftSize = 128
-    this.analyser = new THREE.AudioAnalyser(this.sound, fftSize)
+  setAudioAnalyser () {
+    this.fftSize = 128
+    this.analyser = new AudioAnalyser(this.sound, this.fftSize)
+    this.tAudioData = this.analyser.data
     this.uniforms = Object.assign({
       tAudioData: {
-        value: new THREE.DataTexture( this.analyser.data, fftSize / 2, 1, THREE.LuminanceFormat )
+        value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
       } }, this.uniforms)
   }
 
@@ -176,5 +206,32 @@ export default class Three {
   }
 
   startMicrophone () {
+    this.isMicrophoneUsed = true
+    navigator.mediaDevices.getUserMedia({audio: true}).then(evt => {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      const options = {mediaStream: evt}
+      const src = audioCtx.createMediaStreamSource(evt)
+
+      this.analyserMicrophone = audioCtx.createAnalyser(evt)
+      this.analyserMicrophone.fftSize = 64
+      src.connect(this.analyserMicrophone)
+      this.dataMicrophone = new Uint8Array(this.analyserMicrophone.fftSize)
+      // this.analyserMicrophone.data = new Uint8Array(this.analyserMicrophone.fftSize)
+
+      if (!this.isMicrophoneUsed) {
+        evt.getAudioTracks().forEach(track => {
+          track.stop()
+        })
+        evt.getVideoTracks().forEach(track => {
+          track.stop()
+        })
+      }
+    })
+  }
+  stopMicrophone () {
+    this.isMicrophoneUsed = false
+  }
+  resetAudioData () {
+    this.tAudioData = new Uint8Array(64)
   }
 }

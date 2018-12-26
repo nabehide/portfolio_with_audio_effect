@@ -34,12 +34,15 @@ export default {
       const audioSource = this.$store.state.canvasParameters.audioSource.audioSource
 
       if (audioSource === "music") {
+        this.three.stopMicrophone()
         this.three.startAudio()
       } else if (audioSource === "microphone") {
         this.three.stopAudio()
         this.three.startMicrophone()
       } else {
         this.three.stopAudio()
+        this.three.stopMicrophone()
+        this.three.resetAudioData()
       }
     }
   },
