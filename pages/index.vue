@@ -1,6 +1,7 @@
 <template>
   <div :class="{'container': true, 'isColorInverted': isColorInverted}">
     <div class="intro">
+      <div :class="{'subContainer': true, 'isColorInverted': isColorInverted}">
       <p>nabehide / Engineer</p>
       <p>Tokyo, Japan</p>
       <p>Love: Programming, Music</p>
@@ -50,6 +51,7 @@
         -->
       </table>
     </div>
+    </div>
   </div>
 </template>
 
@@ -87,6 +89,18 @@ export default {
     flex-direction: column;
     p {
       margin: 8px 0px;
+    }
+
+    .subContainer {
+      border: solid thin #111;
+      padding: 10px 30px 0px 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .isColorInverted {
+      border: solid thin #eee;
     }
 
     table {
