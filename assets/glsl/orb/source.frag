@@ -6,6 +6,8 @@ precision mediump float;
 uniform float time;
 uniform vec2  resolution;
 
+uniform sampler2D tAudioData;
+
 uniform int   isColorInverted;
 uniform int   isGlitched;
 uniform float glitch;
@@ -16,8 +18,10 @@ const float PI = 3.14159265358979;
 const float c1 = 0.8;
 const float c2 = 0.11;
 const float c3 = 0.49;
-const float lineWidth = 0.7;
 const float speed = 1.0;
+
+const float lineWidth = 0.8;
+const float senseAudio = 0.4;
 
 float rand(vec2 co){
   return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -42,11 +46,9 @@ void main(void){
     float t = mod(time * speed, period);
 
     if(isGlitched == 1){
-      // p.x += (rand(vec2(t))*2.-1.)*a4;
       for(int i=0; i<5; i++){
         float r1 = rand(vec2(t+0.0, float(i)))*2.-1.;
         float r2 = rand(vec2(t+0.1, float(i)))*2.-1.;
-        // float intensity = rand(vec2(t+0.2, float(i)))*a4/255.;
         float intensity = rand(vec2(t+0.2, float(i)))*glitch/255.;
         if(min(r1, r2)<p.y && p.y<max(r1, r2)){
           p.x += intensity;
@@ -55,25 +57,28 @@ void main(void){
     }
 
     p *= zoom;
+
+    float f = texture2D(tAudioData, vec2(p.x, p.y)).r;
+    f = lineWidth - f*senseAudio;
     
     for (int i=0; i<3; i++) {
 	    float b = (t + float(i) * period / 3.0) * PI * 0.4;
-        float s = sin(b);
-        float ss = s * 1.0 - 0.5;
+      float s = sin(b);
+      float ss = s * 1.0 - 0.5;
 
-        vec2 pos = vec2(p.x*cos(b+1.0)/2.0, p.y*(sin(b+1.0)/2.0));
-        pos *= rot(ss * length(p-vec2(s, cos(b))));
-        pos *= rot(0.5 * PI);
+      vec2 pos = vec2(p.x*cos(b+1.0)/2.0, p.y*(sin(b+1.0)/2.0));
+      pos *= rot(ss * length(p-vec2(s, cos(b))));
+      pos *= rot(0.5 * PI);
 
-        vec3 color;
-        if (i == 0) {
-        	color = vec3(c1, c2, c3);
-        } else if (i==1) {
-        	color = vec3(c2, c3, c1);
-        } else {
-        	color = vec3(c3, c1, c2);
-        }
-        draw += line(pos, lineWidth) * color;
+      vec3 color;
+      if (i == 0) {
+      	color = vec3(c1, c2, c3);
+      } else if (i==1) {
+      	color = vec3(c2, c3, c1);
+      } else {
+      	color = vec3(c3, c1, c2);
+      }
+      draw += line(pos, f) * color;
     }
     
     if(isColorInverted != 0){

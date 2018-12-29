@@ -33,11 +33,14 @@ void main() {
 }
 `
 
+const RESOLUTION = 128
+
 export default class Three {
 
   constructor(store) {
     this.scene  = new Scene()
     this.store = store
+
   }
 
   mounted () {
@@ -45,8 +48,43 @@ export default class Three {
     this.initUniforms()
     this.initOthers()
     this.setScene()
-    this.setAudio()
-    this.setAudioAnalyser()
+
+    /*
+    this.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+      getUserMedia: function(c) {
+        return new Promise(function(y, n) {
+          (navigator.mozGetUserMedia ||
+           navigator.webkitGetUserMedia).call(navigator, c, y, n)
+        })
+      }
+    } : null)
+
+    if (!this.mediaDevices) {
+      console.log("getUserMedia() not supported.")
+      return
+    }
+
+    this.isMicrophoneUsed = true
+    this.mediaDevices.getUserMedia({audio: true}).then(evt => {
+      document.getElementById("buttonChangeAudioSource").addEventListener("click", () => {
+
+        const audioSource = this.store.state.canvasParameters.audioSource.audioSource
+
+        if (audioSource === "music") {
+          this.stopMicrophone()
+          this.startAudio()
+        } else if (audioSource === "microphone") {
+          this.stopAudio()
+          this.startMicrophone(evt)
+        } else {
+          this.stopAudio()
+          this.stopMicrophone()
+          this.resetAudioData()
+        }
+
+      })
+    })
+    */
 
     this.animate()
   }
@@ -144,20 +182,22 @@ export default class Three {
       this.uniforms.time.value += (this.now - this.past)*0.001 * Number(this.store.state.parameters.time.speed.speed)
     }
 
+    /*
     const audioSource = this.store.state.canvasParameters.audioSource.audioSource
     if (audioSource === "music" ) {
       if (this.analyser) {
         this.analyser.getFrequencyData()
         this.tAudioData = this.analyser.data
+        this.uniforms.tAudioData.value.needsUpdate = true
       }
     }else if ( audioSource === "microphone" ) {
       if (this.analyserMicrophone) {
         this.analyserMicrophone.getByteFrequencyData(this.dataMicrophone)
         this.tAudioData = this.dataMicrophone
+        this.uniforms.tAudioData.value.needsUpdate = true
       }
     }
-    // console.log(this.tAudioData)
-    this.uniforms.tAudioData.value.needsUpdate = true
+    */
 
     for (let p in this.store.state.parameters) {
       for (let name in this.store.state.parameters[p]) {
@@ -171,6 +211,7 @@ export default class Three {
     return (now && now.call( performance )) && ( new Date().getTime() )
   }
 
+  /*
   setAudio () {
     const audioFileName = "gpe.m4a"
     const listener = new AudioListener()
@@ -183,40 +224,45 @@ export default class Three {
   }
 
   setAudioAnalyser () {
-    this.fftSize = 128
+    this.fftSize = RESOLUTION
     this.analyser = new AudioAnalyser(this.sound, this.fftSize)
     this.tAudioData = this.analyser.data
-    this.uniforms = Object.assign({
-      tAudioData: {
-        value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
-      } }, this.uniforms)
-  }
-
-  startAudio () {
-    console.log("start music")
-    this.sound.play()
-    console.log(this.sound.isPlaying)
-  }
-  stopAudio () {
-    console.log(this.sound.isPlaying)
-    if (this.sound.isPlaying) {
-      console.log("stop music")
-      this.sound.stop()
+    this.uniforms.tAudioData = {
+      value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
     }
   }
 
-  startMicrophone () {
-    this.isMicrophoneUsed = true
-    navigator.mediaDevices.getUserMedia({audio: true}).then(evt => {
+  startAudio () {
+    this.setAudio()
+    this.setAudioAnalyser()
+
+    console.log("start music")
+    this.sound.play()
+  }
+
+  stopAudio () {
+    if (this.sound && this.sound.isPlaying) {
+      console.log("stop music")
+      this.sound.stop()
+      this.resetAudioData()
+    }
+  }
+
+  startMicrophone (evt) {
+
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
       const options = {mediaStream: evt}
       const src = audioCtx.createMediaStreamSource(evt)
 
       this.analyserMicrophone = audioCtx.createAnalyser(evt)
-      this.analyserMicrophone.fftSize = 64
+      this.analyserMicrophone.fftSize = RESOLUTION/2
       src.connect(this.analyserMicrophone)
       this.dataMicrophone = new Uint8Array(this.analyserMicrophone.fftSize)
-      // this.analyserMicrophone.data = new Uint8Array(this.analyserMicrophone.fftSize)
+      this.tAudioData = this.dataMicrophone
+
+      this.uniforms.tAudioData = {
+        value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
+      }
 
       if (!this.isMicrophoneUsed) {
         evt.getAudioTracks().forEach(track => {
@@ -226,12 +272,17 @@ export default class Three {
           track.stop()
         })
       }
-    })
   }
   stopMicrophone () {
     this.isMicrophoneUsed = false
+    this.resetAudioData()
   }
   resetAudioData () {
-    this.tAudioData = new Uint8Array(64)
+    if (this.tAudioData) {
+      for (let i=0; i<this.tAudioData.length; i++) {
+        this.tAudioData[i] = 0.
+      }
+    }
   }
+  */
 }

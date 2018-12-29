@@ -8,17 +8,23 @@ export const state = () => ({
   },
   scene: {
     type: 'Object',
-    scenes: ["orb", "curves", "audio"],
+    scenes: [
+      "orb",
+      "curves",
+      // "audio",
+    ],
     scene: "orb",
     max: null,
     min: null,
     step: null,
   },
+  /*
   audioSource: {
     type: "Object",
     audioSources: ["none", "music", "microphone"],
     audioSource: "none",
-  }
+  },
+  */
 })
 
 export const mutations = {

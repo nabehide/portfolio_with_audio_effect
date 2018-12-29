@@ -3,7 +3,9 @@
     <canvas id="canvas"/>
 
     <input type="button" id="buttonChangeScene" style="display: none;" @click="handleChangeScene" >
+    <!--
     <input type="button" id="buttonChangeAudioSource" style="display: none;" @click="handleChangeAudioSource" >
+    -->
   </div>
 </template>
 
@@ -30,6 +32,7 @@ export default {
       console.log("change scene", this.$store.state.canvasParameters.scene.scene)
       this.three.setScene()
     },
+    /*
     handleChangeAudioSource () {
       const audioSource = this.$store.state.canvasParameters.audioSource.audioSource
 
@@ -45,8 +48,7 @@ export default {
         this.three.resetAudioData()
       }
     }
-  },
-  updated () {
+    */
   },
 }
 </script>

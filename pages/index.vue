@@ -7,6 +7,7 @@
       <p>Love: Programming, Music</p>
 
       <table>
+        <tbody>
         <tr>
           <td> <a href="https://github.com/nabehide" target="_blank" class="icon"><i class="fab fa-github" aria-hidden=true></i></a> </td>
           <td> <a href="https://github.com/nabehide" target="_blank">Github</a> </td>
@@ -49,6 +50,7 @@
         </tr>
 
         -->
+        </tbody>
       </table>
     </div>
     </div>
@@ -92,15 +94,21 @@ export default {
     }
 
     .subContainer {
+      /*
       border: solid thin #111;
+      border-radius: 3px;
+      */
       padding: 10px 30px 0px 30px;
+
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
     }
     .isColorInverted {
+      /*
       border: solid thin #eee;
+      */
     }
 
     table {

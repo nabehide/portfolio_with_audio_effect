@@ -9,7 +9,7 @@ uniform vec2  resolution;
 uniform sampler2D tAudioData;
 varying vec2 vUv;
 
-vec3 backgroundColor = vec3(0.125, 0.125, 0.125);
+vec3 backgroundColor = vec3(0.5, 0.5, 0.5);
 vec3 color = vec3(1.0, 1.0, 1.0);
 
 void main(void){

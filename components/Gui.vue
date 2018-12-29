@@ -48,6 +48,7 @@ export default {
     })
 
     // audio source
+    /*
     general.add(
       this.canvasParameters.audioSource, "audioSource",
       this.canvasParameters.audioSource.audioSources)
@@ -58,6 +59,7 @@ export default {
       this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["audioSource"]})
       document.getElementById("buttonChangeAudioSource").click()
     })
+    */
 
     this.state = this.$store.getters["parameters/state"]
     this.parameters = JSON.parse(JSON.stringify(this.state))
@@ -125,6 +127,7 @@ export default {
       }
     })
 
+    /*
     // MIDI
     this.midiDevices = {
       inputs: {},
@@ -138,6 +141,7 @@ export default {
     }
     requestMIDI()
     console.log("midiDevices", this.midiDevices)
+    */
   },
   methods: {
     setParameter (effect, name) {
