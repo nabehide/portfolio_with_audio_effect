@@ -18,7 +18,10 @@ const float PI = 3.14159265358979;
 const float c1 = 0.8;
 const float c2 = 0.11;
 const float c3 = 0.49;
-const float speed = 1.0;
+const float speed = 1.5;
+
+const vec2 offsetCenter = vec2(-0.5, 0.1);
+const float offsetZoom = 0.5;
 
 const float lineWidth = 0.8;
 const float senseAudio = 0.4;
@@ -39,6 +42,7 @@ float line(vec2 p, float w){
 
 void main(void){
     vec2 p = (gl_FragCoord.xy * 2.0 - resolution) / min(resolution.x, resolution.y);
+    p -= offsetCenter;
 
     vec3 draw = vec3(0.0);
 
@@ -56,7 +60,7 @@ void main(void){
       }
     }
 
-    p *= zoom;
+    p *= (zoom + offsetZoom);
 
     float f = texture2D(tAudioData, vec2(p.x, p.y)).r;
     f = lineWidth - f*senseAudio;
