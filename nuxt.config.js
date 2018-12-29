@@ -17,7 +17,7 @@ module.exports = {
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: 'https://nabehide.github.io' },
       { property: 'og:description', content: 'This site is created with Nuxt.js and Three.js(WebGL/GLSL).' },
-      { property: 'og:image', content: 'https://nabehide.github.io/thumnail.png' },
+      { property: 'og:image', content: 'https://nabehide.github.io/thumbnail.png' },
 
       { property: 'og:twitter:card', content: 'card' },
       { property: 'og:twitter:site', content: '@____nabehide' },
