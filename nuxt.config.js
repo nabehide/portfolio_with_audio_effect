@@ -1,4 +1,4 @@
-const modulesBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+const modulesBase = process.env.NODE_ENV === 'production' ? {
   modules: [
     ['@nuxtjs/google-analytics', {
       id: 'UA-125972611-2'
@@ -13,10 +13,7 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     ],
     link: [
-      { rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     ],
   },
   env: {
