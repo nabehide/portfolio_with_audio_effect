@@ -137,6 +137,8 @@ export default class Three {
 
       this.renderer.setSize(this.width, this.height)
       this.camera.aspect = this.aspect
+
+      this.uniforms.resolution.value = new Vector2(this.width, this.height)
     }
 
     this.fps = 1000.0 / this.store.state.canvasParameters.fps.fps
