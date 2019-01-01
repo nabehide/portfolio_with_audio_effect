@@ -2,7 +2,7 @@ const modulesBase = process.env.NODE_ENV === 'production' ? {
   modules: [
     ['@nuxtjs/google-analytics', {
       id: 'UA-125972611-2'
-    }]
+    }],
   ],
 } : {}
 
@@ -35,10 +35,8 @@ module.exports = {
   css: [
     'normalize.css',
     '~/assets/css/main.css',
-    '@fortawesome/fontawesome-free-webfonts',
-    '@fortawesome/fontawesome-free-webfonts/css/fa-brands.css',
-    '@fortawesome/fontawesome-free-webfonts/css/fa-regular.css',
-    '@fortawesome/fontawesome-free-webfonts/css/fa-solid.css',
+    // '@fortawesome/fontawesome/styles.css',
+    '@fortawesome/fontawesome-svg-core/styles.css',
   ],
   build: {
     // analyze: true,
@@ -51,4 +49,7 @@ module.exports = {
     },
   },
   ...modulesBase,
+  plugins: [
+    '~/plugins/font-awesome',
+  ],
 }
