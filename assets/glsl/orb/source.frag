@@ -24,7 +24,7 @@ const vec2 offsetCenter = vec2(-0.5, 0.1);
 const float offsetZoom = 0.5;
 
 const float lineWidth = 0.8;
-const float senseAudio = 0.4;
+const float senseAudio = 0.2;
 
 float rand(vec2 co){
   return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -62,7 +62,7 @@ void main(void){
 
     p *= (zoom + offsetZoom);
 
-    float f = texture2D(tAudioData, vec2(p.x, p.y)).r;
+    float f = texture2D(tAudioData, p/256.0).r;
     f = lineWidth - f*senseAudio;
     
     for (int i=0; i<3; i++) {

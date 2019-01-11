@@ -14,6 +14,8 @@ import {
   Vector2,
 } from 'three'
 
+import { flagAudio } from '~/assets/js/parameters'
+
 const DEFAULT_VERTEX_SHADER = `
 void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -41,6 +43,7 @@ export default class Three {
     this.scene  = new Scene()
     this.store = store
 
+    this.isMicrophoneReady = false
   }
 
   mounted () {
@@ -49,42 +52,45 @@ export default class Three {
     this.initOthers()
     this.setScene()
 
-    /*
-    this.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
-      getUserMedia: function(c) {
-        return new Promise(function(y, n) {
-          (navigator.mozGetUserMedia ||
-           navigator.webkitGetUserMedia).call(navigator, c, y, n)
+    if ( flagAudio ) {
+      this.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+        getUserMedia: function(c) {
+          return new Promise(function(y, n) {
+            (navigator.mozGetUserMedia ||
+             navigator.webkitGetUserMedia).call(navigator, c, y, n)
+          })
+        }
+      } : null)
+
+      if (!this.mediaDevices) {
+        console.log("getUserMedia() not supported.")
+        // return
+      } else {
+        this.mediaDevices.getUserMedia({audio: true}).then(evt => {
+          document.getElementById("buttonChangeAudioSource").addEventListener("click", () => {
+
+            const audioSource = this.store.state.canvasParameters.audioSource.audioSource
+
+            if (audioSource === "music") {
+              console.log("audio: music")
+              this.stopMicrophone()
+              this.startAudio()
+            } else if (audioSource === "microphone") {
+              this.isMicrophoneUsed = true
+              console.log("audio: microphone")
+              this.stopAudio()
+              this.startMicrophone(evt)
+            } else {
+              console.log("audio: none")
+              this.stopAudio()
+              this.stopMicrophone()
+              this.resetAudioData()
+            }
+
+          })
         })
       }
-    } : null)
-
-    if (!this.mediaDevices) {
-      console.log("getUserMedia() not supported.")
-      return
     }
-
-    this.isMicrophoneUsed = true
-    this.mediaDevices.getUserMedia({audio: true}).then(evt => {
-      document.getElementById("buttonChangeAudioSource").addEventListener("click", () => {
-
-        const audioSource = this.store.state.canvasParameters.audioSource.audioSource
-
-        if (audioSource === "music") {
-          this.stopMicrophone()
-          this.startAudio()
-        } else if (audioSource === "microphone") {
-          this.stopAudio()
-          this.startMicrophone(evt)
-        } else {
-          this.stopAudio()
-          this.stopMicrophone()
-          this.resetAudioData()
-        }
-
-      })
-    })
-    */
 
     this.animate()
   }
@@ -184,26 +190,30 @@ export default class Three {
       this.uniforms.time.value += (this.now - this.past)*0.001 * Number(this.store.state.parameters.time.speed.speed)
     }
 
-    /*
-    const audioSource = this.store.state.canvasParameters.audioSource.audioSource
-    if (audioSource === "music" ) {
-      if (this.analyser) {
-        this.analyser.getFrequencyData()
-        this.tAudioData = this.analyser.data
-        this.uniforms.tAudioData.value.needsUpdate = true
+    if ( flagAudio ) {
+      const audioSource = this.store.state.canvasParameters.audioSource.audioSource
+      if (audioSource === "music" ) {
+        if (this.analyser) {
+          this.analyser.getFrequencyData()
+          this.tAudioData = this.analyser.data
+          this.uniforms.tAudioData.value.needsUpdate = true
+          // console.log(this.tAudioData)
+          // console.log(this.uniforms.tAudioData.value)
+        }
+      } else if ( audioSource === "microphone" && this.isMicrophoneReady ) {
+        if (this.analyserMicrophone) {
+          this.analyserMicrophone.getByteFrequencyData(this.dataMicrophone)
+          this.tAudioData = this.dataMicrophone
+          this.uniforms.tAudioData.value.needsUpdate = true
+          // console.log(this.analyserMicrophone, this.dataMicrophone)
+          // console.log(this.uniforms.tAudioData.value)
+        }
       }
-    }else if ( audioSource === "microphone" ) {
-      if (this.analyserMicrophone) {
-        this.analyserMicrophone.getByteFrequencyData(this.dataMicrophone)
-        this.tAudioData = this.dataMicrophone
-        this.uniforms.tAudioData.value.needsUpdate = true
-      }
-    }
-    */
 
-    for (let p in this.store.state.parameters) {
-      for (let name in this.store.state.parameters[p]) {
-        this.uniforms[name].value = this.store.state.parameters[p][name][name]
+      for (let p in this.store.state.parameters) {
+        for (let name in this.store.state.parameters[p]) {
+          this.uniforms[name].value = this.store.state.parameters[p][name][name]
+        }
       }
     }
   }
@@ -213,7 +223,6 @@ export default class Three {
     return (now && now.call( performance )) && ( new Date().getTime() )
   }
 
-  /*
   setAudio () {
     const audioFileName = "gpe.m4a"
     const listener = new AudioListener()
@@ -226,33 +235,34 @@ export default class Three {
   }
 
   setAudioAnalyser () {
-    this.fftSize = RESOLUTION
-    this.analyser = new AudioAnalyser(this.sound, this.fftSize)
+    this.analyser = new AudioAnalyser(this.sound, RESOLUTION)
     this.tAudioData = this.analyser.data
     this.uniforms.tAudioData = {
-      value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
+      value: new DataTexture( this.tAudioData, RESOLUTION / 2, 1, LuminanceFormat )
     }
   }
 
   startAudio () {
     this.setAudio()
     this.setAudioAnalyser()
+    this.setScene()
 
-    console.log("start music")
-    this.sound.play()
+    setTimeout(() => {
+      this.sound.play()
+    }, 1000)
   }
 
   stopAudio () {
     if (this.sound && this.sound.isPlaying) {
-      console.log("stop music")
       this.sound.stop()
       this.resetAudioData()
     }
   }
 
   startMicrophone (evt) {
-
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+    // this.mediaDevices.getUserMedia({audio: true}).then(evt => {
+      // const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      const audioCtx = (window.AudioContext) ? new AudioContext : new webkitAudioContext
       const options = {mediaStream: evt}
       const src = audioCtx.createMediaStreamSource(evt)
 
@@ -263,17 +273,27 @@ export default class Three {
       this.tAudioData = this.dataMicrophone
 
       this.uniforms.tAudioData = {
-        value: new DataTexture( this.tAudioData, this.fftSize / 2, 1, LuminanceFormat )
+        // value: new DataTexture( this.tAudioData, RESOLUTION, 1, LuminanceFormat )
+        value: new DataTexture( this.tAudioData, RESOLUTION / 2, 1, LuminanceFormat )
+        // value: new DataTexture( this.tAudioData, RESOLUTION / 4, 1, LuminanceFormat )
       }
 
-      if (!this.isMicrophoneUsed) {
-        evt.getAudioTracks().forEach(track => {
-          track.stop()
-        })
-        evt.getVideoTracks().forEach(track => {
-          track.stop()
-        })
-      }
+      this.setScene()
+
+      setTimeout(() => {
+        // console.log(this.uniforms.tAudioData.value)
+        this.isMicrophoneReady = true
+      }, 1000)
+
+      // if (!this.isMicrophoneUsed) {
+      evt.getAudioTracks().forEach(track => {
+        track.stop()
+      })
+      evt.getVideoTracks().forEach(track => {
+        track.stop()
+      })
+      // }
+    // })
   }
   stopMicrophone () {
     this.isMicrophoneUsed = false
@@ -284,7 +304,7 @@ export default class Three {
       for (let i=0; i<this.tAudioData.length; i++) {
         this.tAudioData[i] = 0.
       }
+      this.uniforms.tAudioData.value.needsUpdate = true
     }
   }
-  */
 }

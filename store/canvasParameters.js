@@ -18,13 +18,11 @@ export const state = () => ({
     min: null,
     step: null,
   },
-  /*
   audioSource: {
     type: "Object",
     audioSources: ["none", "music", "microphone"],
     audioSource: "none",
   },
-  */
 })
 
 export const mutations = {

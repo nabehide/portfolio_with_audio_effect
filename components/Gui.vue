@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { flagAudio } from '~/assets/js/parameters'
 export default {
   data () {
     return {
@@ -48,18 +49,17 @@ export default {
     })
 
     // audio source
-    /*
-    general.add(
-      this.canvasParameters.audioSource, "audioSource",
-      this.canvasParameters.audioSource.audioSources)
-    .setValue(this.canvasParameters["audioSource"]["audioSource"])
-    .listen()
-    .onChange(() => {
-      console.log(this.canvasParameters.audioSource.audioSource)
-      this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["audioSource"]})
-      document.getElementById("buttonChangeAudioSource").click()
-    })
-    */
+    if ( flagAudio ) {
+      general.add(
+        this.canvasParameters.audioSource, "audioSource",
+        this.canvasParameters.audioSource.audioSources)
+      .setValue(this.canvasParameters["audioSource"]["audioSource"])
+      .listen()
+      .onChange(() => {
+        this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["audioSource"]})
+        document.getElementById("buttonChangeAudioSource").click()
+      })
+    }
 
     this.state = this.$store.getters["parameters/state"]
     this.parameters = JSON.parse(JSON.stringify(this.state))
@@ -122,7 +122,6 @@ export default {
           break
 
         default:
-          console.log(e.key)
           break
       }
     })
