@@ -28,12 +28,12 @@ object-assign
 @license MIT
 */
 
-//!\ DECLARE ALIAS AFTER assign prototype !
-
-//!\ DECLARE ALIAS AFTER assign prototype !
-
 /*!
  * vue-no-ssr v1.0.0
  * (c) 2018-present egoist <0x142857@gmail.com>
  * Released under the MIT License.
  */
+
+//!\ DECLARE ALIAS AFTER assign prototype !
+
+//!\ DECLARE ALIAS AFTER assign prototype !
