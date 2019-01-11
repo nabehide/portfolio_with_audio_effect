@@ -5,6 +5,11 @@ const modulesBase = process.env.NODE_ENV === 'production' ? {
     }],
   ],
 } : {}
+const generateBase = process.env.NODE_ENV === 'audio' ? {
+  generate: {
+    dir: "audio",
+  },
+} : {}
 
 module.exports = {
   head: {
@@ -52,4 +57,5 @@ module.exports = {
   plugins: [
     '~/plugins/font-awesome',
   ],
+  ...generateBase,
 }

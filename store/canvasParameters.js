@@ -20,7 +20,11 @@ export const state = () => ({
   },
   audioSource: {
     type: "Object",
-    audioSources: ["none", "music", "microphone"],
+    audioSources: [
+      "none",
+      "music",
+      // "microphone"
+    ],
     audioSource: "none",
   },
 })
