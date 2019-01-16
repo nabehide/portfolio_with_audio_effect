@@ -249,7 +249,7 @@ export default class Three {
 
     setTimeout(() => {
       this.sound.play()
-    }, 1000)
+    }, 3000)
   }
 
   stopAudio () {
