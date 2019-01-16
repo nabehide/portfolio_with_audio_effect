@@ -209,11 +209,11 @@ export default class Three {
           // console.log(this.uniforms.tAudioData.value)
         }
       }
+    }
 
-      for (let p in this.store.state.parameters) {
-        for (let name in this.store.state.parameters[p]) {
-          this.uniforms[name].value = this.store.state.parameters[p][name][name]
-        }
+    for (let p in this.store.state.parameters) {
+      for (let name in this.store.state.parameters[p]) {
+        this.uniforms[name].value = this.store.state.parameters[p][name][name]
       }
     }
   }
