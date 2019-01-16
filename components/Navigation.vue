@@ -3,7 +3,7 @@
     <nav :class="{ 'isColorInverted' : (isColorInverted === true) }">
       <ul>
         <nuxt-link exact to="/" ><li>Top</li></nuxt-link>
-        <nuxt-link to="/wallpaper" ><li>Wallpapers</li></nuxt-link>
+        <nuxt-link to="/works" ><li>Works</li></nuxt-link>
         <nuxt-link to="/settings" ><li>Settings</li></nuxt-link>
       </ul>
     </nav>
