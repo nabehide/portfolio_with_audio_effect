@@ -1,13 +1,37 @@
+<i18n>
+  {
+    "ja": {
+      "title": "ウォーキング＆乗換案内",
+      "description1": "「1駅先から乗るルート」と「1駅手前で降りるルート」も同時に検索するアプリケーション。",
+      "description2": "フロントエンドはNuxt.js、サーバーサイドはFlaskをHerokuで動かしています。",
+      "description3": "スマートフォンアプリはReact Nativeで作成しています。",
+
+      "site": "サイト"
+    },
+    "en": {
+      "title": "Walking and Transit Navigation",
+      "description1": "The App suggests routes when walking between stations in Japan.",
+      "description2": "Nuxt.js and Flask are used for web.",
+      "description3": "React Native is used for native app.",
+
+      "site": "site"
+    }
+  }
+</i18n>
+
 <template>
   <section>
+    <!--
     <h3>ウォーキング＆乗換案内</h3>
+    -->
+    <h3>{{ $t('title') }}</h3>
     <div class="descriptions">
-      <p>「1駅先から乗るルート」と「1駅手前で降りるルート」も同時に検索するアプリケーション。</p>
-      <p>フロントエンドはNuxt.js、サーバーサイドはFlaskをHerokuで動かしています。</p>
-      <p>スマートフォンアプリはReact Nativeで作成しています。</p>
+      <p>{{ $t('description1') }}</p>
+      <p>{{ $t('description2') }}</p>
+      <p>{{ $t('description3') }}</p>
       <p>
         <a href="http://walkandride.html.xdomain.jp" target="_blank">
-          <font-awesome-icon :icon="['fas', 'globe']" /> Webサイト
+          <font-awesome-icon :icon="['fas', 'globe']" /> Web{{ $t('site') }}
         </a>
       </p>
       <p>

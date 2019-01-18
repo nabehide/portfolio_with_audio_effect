@@ -3,8 +3,33 @@ const modulesBase = process.env.NODE_ENV === 'production' ? {
     ['@nuxtjs/google-analytics', {
       id: 'UA-125972611-2'
     }],
+    ['nuxt-i18n', {
+      locales: [
+        { code: 'ja', iso: 'ja_JP' },
+        { code: 'en', iso: 'en_US' },
+      ],
+      defaultLocale: 'ja',
+      vueI18n: {
+        fallbackLocale: 'en',
+      },
+      vueI18nLoader: true,
+    }]
   ],
-} : {}
+} : {
+  modules: [
+    ['nuxt-i18n', {
+      locales: [
+        { code: 'ja', iso: 'ja_JP' },
+        { code: 'en', iso: 'en_US' },
+      ],
+      defaultLocale: 'ja',
+      vueI18n: {
+        fallbackLocale: 'en',
+      },
+      vueI18nLoader: true,
+    }]
+  ],
+}
 const generateBase = process.env.NODE_ENV === 'audio' ? {
   generate: {
     dir: "audio",
