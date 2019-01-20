@@ -70,7 +70,6 @@ module.exports = {
   css: [
     'normalize.css',
     '~/assets/css/main.css',
-    // '@fortawesome/fontawesome/styles.css',
     '@fortawesome/fontawesome-svg-core/styles.css',
   ],
   build: {

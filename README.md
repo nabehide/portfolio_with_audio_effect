@@ -1,5 +1,4 @@
-To run this project, add below file.
+The source code of my portfolio site.
 
-```assets/js/parameters.js
-export const flagAudio = false
-```
+* [Portfolio]("https://nabehide.github.io")
+* [Portfolio with audio effect]("https://nabehide.github.io/portfolio_with_audio_effect")
