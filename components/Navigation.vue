@@ -12,8 +12,6 @@
 
 <script>
 export default {
-  components: {
-  },
   computed: {
     isColorInverted () { return this.$store.state.parameters.invertColor.isColorInverted.isColorInverted }
   },
@@ -32,12 +30,13 @@ nav {
     list-style: none;
     margin: 5px 0px;
 
+    a {
+      border-bottom-color: transparent;
+      transition: border-bottom-color 1s ease 0.01s;
+    }
     .nuxt-link-exact-active {
       border-bottom: black solid thin;
-    }
-
-    a {
-      color: black;
+      transition: border-bottom-color 1s ease 0.01s;
     }
 
     li {
@@ -54,10 +53,8 @@ nav {
 nav.isColorInverted {
   ul {
     .nuxt-link-exact-active {
-      border-bottom-color: #eee,
-    }
-    a {
-      color: #eee,
+      border-bottom-color: #eee;
+      transition: border-bottom-color 1s ease 0.01s;
     }
   }
   border-bottom-color: #eee,
