@@ -2,9 +2,9 @@
   <div class="container">
     <nav :class="{ 'isColorInverted' : (isColorInverted === true) }">
       <ul>
-        <nuxt-link exact to="/" ><li>Top</li></nuxt-link>
-        <nuxt-link to="/works" ><li>Works</li></nuxt-link>
-        <nuxt-link to="/settings" ><li>Settings</li></nuxt-link>
+        <li><nuxt-link exact to="/" >Top</nuxt-link></li>
+        <li><nuxt-link to="/works" >Works</nuxt-link></li>
+        <li><nuxt-link to="/settings" >Settings</nuxt-link></li>
       </ul>
     </nav>
   </div>
@@ -28,21 +28,33 @@ nav {
 
   ul {
     list-style: none;
-    margin: 5px 0px;
-
-    a {
-      border-bottom-color: transparent;
-      transition: border-bottom-color 1s ease 0.01s;
-    }
-    .nuxt-link-exact-active {
-      border-bottom: black solid thin;
-      transition: border-bottom-color 1s ease 0.01s;
-    }
+    margin: 5px 0px 2px 0px;
 
     li {
       display: inline-block;
       margin: 0px 10px;
+
+      a {
+        text-decoration: none;
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        height: 1px;
+        background-color: #111;
+        transform: scale(0);
+        transition: transform 0.2s 0.1s;
+      }
+      &:hover::after {
+        transform: scale(1);
+      }
+
+      & .nuxt-link-exact-active {
+        border-bottom: solid thin #111;
+      }
     }
+
   }
   border-bottom: {
     color: black;
@@ -52,9 +64,13 @@ nav {
 }
 nav.isColorInverted {
   ul {
-    .nuxt-link-exact-active {
-      border-bottom-color: #eee;
-      transition: border-bottom-color 1s ease 0.01s;
+    li {
+      &::after {
+        background-color: #eee;
+      }
+      & .nuxt-link-exact-active {
+        border-bottom: solid thin #eee;
+      }
     }
   }
   border-bottom-color: #eee,
