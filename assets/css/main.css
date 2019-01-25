@@ -15,11 +15,6 @@ a:active {
   color: #111;
 }
 
-@media screen and (min-width:768px) {
-  body {
-    font-size: 16px;
-  }
-}
 .isColorInverted * {
   color: #eee;
   border-color: #eee;

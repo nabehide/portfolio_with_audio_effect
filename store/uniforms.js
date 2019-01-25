@@ -1,59 +1,59 @@
 export const state = () => ({
-  invertColor: {
+  color: {
     isColorInverted: {
-      type: "Boolean",
-      isColorInverted: true,
-      max: null,
+      type: "i",
+      value: true,
       min: null,
+      max: null,
       step: null,
     },
   },
   glitch: {
     isGlitched: {
-      type: "Boolean",
-      isGlitched: false,
-      max: null,
+      type: "i",
+      value: false,
       min: null,
+      max: null,
       step: null,
     },
     glitch: {
-      type: "Number",
-      glitch: 5.0,
-      max: 30,
+      type: "f",
+      value: 5.0,
       min: 0,
+      max: 30,
       step: 0.1,
     },
   },
   zoom: {
     zoom: {
-      type: "Number",
-      zoom: 1.0,
-      max: 8.0,
+      type: "f",
+      value: 1.0,
       min: 0.1,
+      max: 8.0,
       step: 0.01,
-    },
+    }
   },
   time: {
     isStopped: {
-      type: "Boolean",
-      isStopped: false,
-      max: null,
+      type: "i",
+      value: false,
       min: null,
+      max: null,
       step: null,
     },
     speed: {
-      type: "Number",
-      speed: 0.05,
-      max: 2,
+      type: "f",
+      value: 0.05,
       min: 0.01,
+      max: 2.0,
       step: 0.01,
-    },
+    }
   },
 })
 
 export const mutations = {
   set (state, {effect, name, value}) {
-    state[effect][name][name] = value
+    state[effect][name].value = value
   }
 }
 

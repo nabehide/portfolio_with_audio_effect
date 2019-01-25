@@ -1,7 +1,8 @@
 <template>
-  <div :class="{'container': true, 'isColorInverted': isColorInverted}">
-    <div class="intro">
-      <div :class="{'subContainer': true, 'isColorInverted': isColorInverted}">
+  <div>
+    <Gui/>
+    <div :class="{'container': true, 'isColorInverted': isColorInverted}">
+      <div class="intro">
         <p>nabehide / Engineer</p>
         <p>Tokyo, Japan</p>
         <p>Love: Programming, Music</p>
@@ -9,23 +10,21 @@
         <table>
           <tbody>
           <tr>
-            <td> <a href="https://github.com/nabehide" target="_blank" class="icon">
+            <td class="icon"> <a href="https://github.com/nabehide" target="_blank">
               <font-awesome-icon :icon="['fab', 'github']" />
             </a> </td>
             <td> <a href="https://github.com/nabehide" target="_blank">Github</a> </td>
           </tr>
 
           <tr>
-            <td>
-              <a href="https://twitter.com/____nabehide" target="_blank" class="icon">
-                <font-awesome-icon :icon="['fab', 'twitter']" />
-              </a>
-            </td>
+            <td class="icon"> <a href="https://twitter.com/____nabehide" target="_blank">
+              <font-awesome-icon :icon="['fab', 'twitter']" />
+            </a> </td>
             <td> <a href="https://twitter.com/____nabehide" target="_blank">Twitter</a> </td>
           </tr>
 
           <tr>
-            <td> <a href="https://soundcloud.com/nabehide" target="_blank" class="icon">
+            <td class="icon"> <a href="https://soundcloud.com/nabehide" target="_blank">
               <font-awesome-icon :icon="['fab', 'soundcloud']" />
             </a> </td>
             <td> <a href="https://soundcloud.com/nabehide" target="_blank">Soundcloud</a> </td>
@@ -66,34 +65,27 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Gui from '~/components/Gui'
 export default {
   components: {
-    FontAwesomeIcon,
+    Gui,
   },
   computed: {
-    isColorInverted () { return this.$store.state.parameters.invertColor.isColorInverted.isColorInverted }
+    isColorInverted () { return this.$store.state.uniforms.color.isColorInverted.value }
   },
 }
 </script>
 
 <style scoped lang="scss">
+#button {
+  display: none;
+}
 .container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-
-  /*
-  color: black;
-  a:link,
-  a:visited,
-  a:hover,
-  a:active {
-    color: black;
-  }
-  */
 
   .intro {
     height: 100%;
@@ -106,10 +98,6 @@ export default {
     }
 
     .subContainer {
-      /*
-      border: solid thin #111;
-      border-radius: 3px;
-      */
       padding: 10px 30px 0px 30px;
 
       display: flex;
@@ -117,29 +105,16 @@ export default {
       align-items: center;
       flex-direction: column;
     }
-    .isColorInverted {
-      /*
-      border: solid thin #eee;
-      */
-    }
 
     table {
       padding: 5px;
       * {
         padding: 2px;
       }
+      .icon {
+        text-align: center;
+      }
     }
   }
 }
-/*
-.isColorInverted {
-  color: white;
-  a:link,
-  a:visited,
-  a:hover,
-  a:active {
-    color: white;
-  }
-}
-*/
 </style>

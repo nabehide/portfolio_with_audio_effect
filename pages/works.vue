@@ -32,7 +32,7 @@ export default {
     WalkAndRide,
   },
   computed: {
-    isColorInverted () { return this.$store.state.parameters.invertColor.isColorInverted.isColorInverted }
+    isColorInverted () { return this.$store.state.uniforms.color.isColorInverted.value }
   },
 }
 </script>

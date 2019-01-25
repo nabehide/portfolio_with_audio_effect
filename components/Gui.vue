@@ -1,210 +1,58 @@
 <template>
   <div id="guiWrapper">
-    <div id="guiContainer"></div>
+    <div id="guiContainer"/>
   </div>
 </template>
 
 <script>
-import { flagAudio } from '~/assets/js/parameters'
+import { flagAudio } from '~/assets/js/parameter';
+
 export default {
-  data () {
-    return {
-    }
-  },
   mounted () {
-    const dat = require("dat.gui")
+    const dat = require("dat.gui");
     this.gui = new dat.GUI({
       closed: false,
       closeOnTop: true,
       autoPlace: false,
-    })
-    this.gui.open()
+    });
+    this.gui.close();
+    const guiContainer = document.getElementById("guiContainer");
+    guiContainer.appendChild(this.gui.domElement);
 
-    const guiContainer = document.getElementById("guiContainer")
-    guiContainer.appendChild(this.gui.domElement)
-
-    this.canvasParametersState = this.$store.getters["canvasParameters/state"]
-    this.canvasParameters = JSON.parse(JSON.stringify(this.canvasParametersState))
-
-    const general = this.gui.addFolder("general")
-    general.open()
-
-    // fps
-    general.add(
-      this.canvasParameters["fps"], "fps",
-      this.canvasParameters["fps"].min, this.canvasParameters["fps"].max,
-      this.canvasParameters["fps"].step
-    ).listen().onChange(() => {
-      this.$store.commit("canvasParameters/set", {name: "fps", value: this.canvasParameters["fps"]["fps"]})
-    })
-
-    // scene
-    general.add(
-      this.canvasParameters["scene"], "scene",
-      this.canvasParameters["scene"]["scenes"])
-    .setValue(this.canvasParameters["scene"]["scene"])
-    .onChange(() => {
-      this.$store.commit("canvasParameters/set", {name: "scene", value: this.canvasParameters["scene"]["scene"]})
-      document.getElementById("buttonChangeScene").click()
-    })
-
-    // audio source
     if ( flagAudio ) {
-      general.add(
-        this.canvasParameters.audioSource, "audioSource",
-        this.canvasParameters.audioSource.audioSources)
-      .setValue(this.canvasParameters["audioSource"]["audioSource"])
-      .listen()
-      .onChange(() => {
-        this.$store.commit("canvasParameters/set", {name: "audioSource", value: this.canvasParameters["audioSource"]["audioSource"]})
-        document.getElementById("buttonChangeAudioSource").click()
-      })
+      const general = this.gui.addFolder("general");
+      general.open();
+      const generalState = this.$store.getters["general/state"];
+      const state = JSON.parse(JSON.stringify(generalState));
+      general.add(state, "audioSources", state.audioSources).setValue(state.audioSource).listen()
+      .onChange(audioSource => {
+        this.$store.commit("general/set", {name: "audioSource", value: audioSource})
+        document.getElementById("button").click();
+      });
     }
 
-    this.state = this.$store.getters["parameters/state"]
-    this.parameters = JSON.parse(JSON.stringify(this.state))
-
-    for(let effect in this.parameters){
-      const folder = this.gui.addFolder(effect)
-      folder.open()
-      for(let name in this.parameters[effect]){
-        const { max, min, step } = this.parameters[effect][name]
-        // folder.add(this.parameters[effect], name).listen().onChange(() => {
-        folder.add(this.parameters[effect][name], name, min, max, step).listen().onChange(() => {
-          this.setParameter(effect, name)
+    const uniformsState = this.$store.getters["uniforms/state"];
+    const uniforms = JSON.parse(JSON.stringify(uniformsState));
+    for (let effect in uniforms) {
+      const folder = this.gui.addFolder(effect);
+      folder.open();
+      for (let name in uniforms[effect]) {
+        const target = uniforms[effect][name];
+        const { min, max, step } = target;
+        folder.add(target, "value", target.min, target.max, target.step).name(name).onChange(value => {
+          this.$store.commit("uniforms/set", {effect: effect, name: name, value: value});
         })
       }
     }
-
-    // window.addEventListener('keydown', (e) => { this.keyEventCase(e, true) })
-    // window.addEventListener('keyup', (e) => { this.keyEventCase(e, false) })
-    window.addEventListener('keydown', (e) => {
-      let effect
-      let name
-      switch (e.key) {
-        case 'a':
-          effect = 'invertColor'
-          name = 'isColorInverted'
-          this.keyEvent(effect, name, !this.parameters[effect][name][name])
-          break
-
-        case 's':
-          effect = 'glitch'
-          name = 'isGlitched'
-          this.keyEvent(effect, name, !this.parameters[effect][name][name])
-          break
-        case 'w':
-          effect = 'glitch'
-          name = 'glitch'
-          this.keyEvent(effect, name, this.parameters[effect][name][name]+1)
-          break
-        case 'x':
-          effect = 'glitch'
-          name = 'glitch'
-          this.keyEvent(effect, name, this.parameters[effect][name][name]-1)
-          break
-
-        case 'e':
-          effect = 'zoom'
-          name = 'zoom'
-          this.keyEvent(effect, name, this.parameters[effect][name][name]+1)
-          break
-        case 'c':
-          effect = 'zoom'
-          name = 'zoom'
-          this.keyEvent(effect, name, this.parameters[effect][name][name]-1)
-          break
-
-        case 'f':
-          effect = 'time'
-          name = 'isStopped'
-          this.keyEvent(effect, name, !this.parameters[effect][name][name])
-          break
-
-        default:
-          break
-      }
-    })
-
-    /*
-    // MIDI
-    this.midiDevices = {
-      inputs: {},
-      outputs: {},
-    }
-    const requestMIDI = () => {
-      if (navigator["requestMIDIAccess"]) {
-        navigator["requestMIDIAccess"]()
-        .then(this.requestSuccess, this.requestError)
-      }
-    }
-    requestMIDI()
-    console.log("midiDevices", this.midiDevices)
-    */
   },
-  methods: {
-    setParameter (effect, name) {
-      this.$store.commit("parameters/set", {effect: effect, name: name, value: this.parameters[effect][name][name]})
-    },
-    keyEvent (effect, name, b) {
-      this.parameters[effect][name][name] = b
-      this.setParameter(effect, name)
-    },
-    // keyEventCase (e, b) {
-    //   switch (e.key) {
-    //     case 'a':
-    //       this.keyEvent('isColorInverted', b)
-    //       break
-    //     default:
-    //       console.log(e.key)
-    //       break
-    //   }
-    // },
-
-    requestSuccess (data) {
-      const inputIterator = data.inputs.values()
-      for (let input=inputIterator.next(); !input.done; input=inputIterator.next()) {
-        const value = input.value
-        this.midiDevices.inputs[value.name] = value
-        value.addEventListener('midimessage', this.inputEvent, false)
-      }
-      const outputIterator = data.outputs.values()
-      for (let output=outputIterator.next(); !output.done; output=outputIterator.next()) {
-        const value = output.value
-        this.midiDevices.outputs[value.name] = value
-      }
-    },
-    requestError (error) {
-      console.log("MIDI error", error)
-    },
-    inputEvent (e) {
-      switch (e) {
-        default:
-        break
-      }
-    },
-  }
 }
 </script>
 
-<style scoped>
+<style>
 #guiWrapper {
   position: absolute;
   top: 0;
   right: 0;
-}
-#guiContainer {
-  position: relative;
   z-index: 1;
-}
-
-#guiContainer *{
-  font-size: 20px;
-  color: red;
-}
-@media screen and (min-width:768px) {
-  #guiContainer *{
-    font-size: 10px;
-  }
 }
 </style>

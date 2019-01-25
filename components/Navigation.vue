@@ -1,78 +1,54 @@
 <template>
-  <div class="container">
-    <nav :class="{ 'isColorInverted' : (isColorInverted === true) }">
-      <ul>
-        <li><nuxt-link exact to="/" >Top</nuxt-link></li>
-        <li><nuxt-link to="/works" >Works</nuxt-link></li>
-        <li><nuxt-link to="/settings" >Settings</nuxt-link></li>
-      </ul>
-    </nav>
+  <div :class="{'container': true, 'isColorInverted': isColorInverted}">
+    <ul>
+      <li><nuxt-link to="/">Top</nuxt-link></li>
+      <li><nuxt-link to="/works">Works</nuxt-link></li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
   computed: {
-    isColorInverted () { return this.$store.state.parameters.invertColor.isColorInverted.isColorInverted }
+    isColorInverted () { return this.$store.state.uniforms.color.isColorInverted.value }
   },
 }
 </script>
 
 <style scoped lang="scss">
-nav {
+.container {
   z-index: 100;
-
   position: absolute;
   top: 0;
   left: 0;
 
   ul {
     list-style: none;
-    margin: 5px 0px 2px 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 10px 5px 5px 10px;
 
     li {
       display: inline-block;
-      margin: 0px 10px;
-
+      padding: 0px 5px;
       a {
         text-decoration: none;
       }
-
-      &::after {
-        content: '';
-        display: block;
-        height: 1px;
-        background-color: #111;
-        transform: scale(0);
-        transition: transform 0.2s 0.1s;
-      }
-      &:hover::after {
-        transform: scale(1);
-      }
-
-      & .nuxt-link-exact-active {
+      .nuxt-link-exact-active {
         border-bottom: solid thin #111;
       }
     }
-
-  }
-  border-bottom: {
-    color: black;
-    style: solid;
-    width: thin;
   }
 }
-nav.isColorInverted {
+.isColorInverted {
   ul {
+    /*
+    border-bottom-color: #eee;
+    */
     li {
-      &::after {
-        background-color: #eee;
-      }
-      & .nuxt-link-exact-active {
-        border-bottom: solid thin #eee;
+      .nuxt-link-exact-active {
+        border-bottom-color: #eee;
       }
     }
   }
-  border-bottom-color: #eee,
 }
 </style>

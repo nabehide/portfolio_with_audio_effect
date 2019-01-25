@@ -1,33 +1,26 @@
-const modulesBase = process.env.NODE_ENV === 'production' ? {
+const pkg = require('./package')
+
+const moduleCommon = [
+  'nuxt-i18n', {
+    locales: [
+      { code: 'ja', iso: 'ja_JP' },
+      { code: 'en', iso: 'en_US' },
+    ],
+    defaultLocale: 'ja',
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+    vueI18nLoader: true,
+  },
+]
+const moduleBase = process.env.NODE_ENV === 'production' ? {
   modules: [
-    ['@nuxtjs/google-analytics', {
-      id: 'UA-125972611-2'
-    }],
-    ['nuxt-i18n', {
-      locales: [
-        { code: 'ja', iso: 'ja_JP' },
-        { code: 'en', iso: 'en_US' },
-      ],
-      defaultLocale: 'ja',
-      vueI18n: {
-        fallbackLocale: 'en',
-      },
-      vueI18nLoader: true,
-    }]
-  ],
+    ['@nuxtjs/google-analytics', { id: 'UA-125972611-2' }],
+    moduleCommon,
+  ]
 } : {
   modules: [
-    ['nuxt-i18n', {
-      locales: [
-        { code: 'ja', iso: 'ja_JP' },
-        { code: 'en', iso: 'en_US' },
-      ],
-      defaultLocale: 'ja',
-      vueI18n: {
-        fallbackLocale: 'en',
-      },
-      vueI18nLoader: true,
-    }]
+    moduleCommon,
   ],
 }
 const generateBase = process.env.NODE_ENV === 'audio' ? {
@@ -42,6 +35,11 @@ const routerBase = process.env.NODE_ENV === 'audio' ? {
 } : {}
 
 module.exports = {
+  mode: 'universal',
+
+  /*
+  ** Headers of the page
+  */
   head: {
     title: 'nabehide\'s portfolio',
     meta: [
@@ -58,34 +56,51 @@ module.exports = {
       { property: 'og:twitter:site', content: '@____nabehide' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-    ],
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ]
   },
-  env: {
-    wallpapers: [
-      { name: "arabesque" },
-      { name: "circlesInLine" },
-    ],
-  },
+
+  /*
+  ** Customize the progress-bar color
+  */
+  loading: { color: '#fff' },
+
+  /*
+  ** Global CSS
+  */
   css: [
     'normalize.css',
     '~/assets/css/main.css',
     '@fortawesome/fontawesome-svg-core/styles.css',
   ],
+
+  /*
+  ** Plugins to load before mounting the App
+  */
+  plugins: [
+    '~/plugins/fontawesome',
+  ],
+
+  /*
+  ** Nuxt.js modules
+  */
+  ...moduleBase,
+
+  /*
+  ** Build configuration
+  */
   build: {
-    // analyze: true,
-    extend(config, { isDev, isClient }) {
+    /*
+    ** You can extend webpack config here
+    */
+    extend(config, ctx) {
       config.module.rules.push({
         test: /\.(glsl|frag|vert)$/,
         loader: 'raw-loader',
         exclude: '/node_modules/',
       })
-    },
+    }
   },
-  ...modulesBase,
-  plugins: [
-    '~/plugins/font-awesome',
-  ],
   ...generateBase,
   ...routerBase,
 }
